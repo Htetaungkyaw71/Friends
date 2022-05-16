@@ -1,0 +1,836 @@
+{% extends 'layout.html' %}
+
+
+    {% block body %}
+
+    {% include 'navbar.html' %}
+        <div class="container" style="margin-top: 100px;">
+            <div class="row p-3">
+                <div class="col-md-4 text-center">
+                    <img src="{{profile_image}}" class="profile-img">
+                  
+                </div>
+                <div class="col-md-8 profile-second-content">
+                    <span class="profile-name">{{user.username}}</span>
+                    <b class="profile-name1 ms-3">{{age}}</b>
+                
+               
+                    {% if user == current_user %}
+                  
+
+                    <span class="dropdown setting ms-3">
+  
+       
+                        <i class="fas fa-ellipsis-h" style="font-size: 20px;cursor: pointer;"  id="dropdownMenuLink"  data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    
+                      
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" >              
+                            Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout')}} ">Logout</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a></li>
+                        </ul>
+                    </span>
+                    <!-- delete -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delection</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                Are you sure to delete?
+            
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="/delete_account" method="post">
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+            </div>
+                <!-- edit -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit profile</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('profile', id = current_user.id)}}" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label  class="form-label" >Change profile image</label>
+                                    <input type="file" class="form-control" name="file" >
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label" >Name</label>
+                                    <input type="text" class="form-control" name="username" value="{{user.username}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label" >Bio</label>
+                                    {% if user.bio %}
+                                    <input type="text" class="form-control" name="bio" value="{{user.bio}}">
+                                    {% else %}
+                                    <input type="text" class="form-control" name="bio">
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label" >Relationship
+                                        {% if user.relationship %}
+                                        -  {{user.relationship}}
+                                        {% endif %}
+                                    </label>
+                                    <select class="form-control" name="relationship">
+                                      
+                                        <option disabled selected>Select</option>
+                                 
+                            
+                                        <option value="Single">Single</option>
+                                        <option value="Relationship">Relationship</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Engaged">Engaged</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="row g-3 align-items-center mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Birth 
+                                            {% if user.birth %}
+                                            - {{user.birth}}
+                                            {% endif %}
+                                        </label>
+                                        <input type="date" class="form-control" name="birth">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Gender
+                                            {% if user.gender %}
+                                            -  {{user.gender}}
+                                            {% endif %}
+                                        </label>
+                                    
+                                      <select class="form-control" name="gender">
+                               
+                                          <option disabled selected>Select Gender</option>
+                                    
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                          <option value="Other">Other</option>
+                                      </select>
+                                    
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+            
+                              </form>
+                        </div>
+            
+            
+            
+                    
+                    </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <span>
+                    <form action="{{url_for('following',id=user.id)}}" method="post" style="display: inline;">
+                        {% if follow_status %}
+                        <button type="submit" class="btn btn-secondary ms-3">Unfollow</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary ms-3">Follow</button>
+                        {% endif %}
+                    </form>
+                </span>            
+                        {% endif %}
+                       
+                
+
+                
+                
+                    
+                    <div class="mt-3">
+                        <span>
+                            {% if posts_count > 1 %}
+                            <b>{{posts_count}}</b>
+                            posts</span>
+                            {% else %}
+                            <b>{{posts_count}}</b>
+                            post</span>
+                            {% endif %}
+                        <span class="ms-4" data-bs-toggle="modal" data-bs-target="#followerModal" style="cursor: pointer;">
+                            {% if follower_count > 1  %}
+                            <b>{{follower_count}}</b>
+                             followers
+                            </span>
+                             {% else %}
+                             <b>{{follower_count}}</b>
+                             follower
+                            </span>
+                             {% endif %}
+                        <span class="ms-4 following" data-bs-toggle="modal" data-bs-target="#followingModal"  style="cursor: pointer;" >
+                            <b>{{following_count}}</b>                    
+                         following</span>
+                    </div>
+                  
+                    <!-- Button trigger modal -->
+
+  
+  <!-- Follower -->
+  <div class="modal fade" id="followerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% for i in followers %}
+                <div class="mt-3 d-flex justify-content-between">
+                    <span>
+                        <img src="{{ url_for('static', filename='images/' + i.image)}}" class="circle-img">
+                        <a href="{{url_for('profile',id=i.id)}}" class="post-owner ms-2">{{i.username}}</a>           
+                    </span>
+
+                    <div class="circle-plus">                                 
+                        <a href="{{url_for('profile',id=i.id)}}" class="btn btn-outline-primary ms-2">View</a>
+                    </div>
+
+                   
+                   
+                  </div>
+                  <hr>
+     
+            {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Following -->
+    <div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Following</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for i in following %}
+                <div class="mt-3 d-flex justify-content-between">
+                    <span>
+                        <img src="{{ url_for('static', filename='images/' + i.image)}}" class="circle-img">
+                        <a href="{{url_for('profile', id=i.id)}}" class="post-owner ms-2">{{i.username}}</a>
+                    
+                    </span>
+                    <div class="circle-plus">
+                        <a href="{{url_for('profile',id=i.id)}}" class=" btn btn-outline-primary ms-2">View</a>
+                    </div>
+                  
+                   
+                  </div>
+                  <hr>
+     
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+                 
+                    {% if user.bio %}
+                    <p class="mt-4">
+                        <i class="fas fa-feather-alt"></i>
+                        {{user.bio}}
+                     </p>
+                     {% endif %}
+                    <div class="mt-4">
+                        {% if user.gender %}
+                        <span class="mt-4">
+                           <i class="fas fa-venus-mars"></i>
+                            {{user.gender}}
+                        </span>
+                        {% if user.relationship %}
+                        <span class="mt-4  ms-5">
+                            <i class="fas fa-heart"></i>
+                            {{user.relationship}}
+                        </span>
+                         {% endif %}
+                       
+                          {% endif %}         
+                    </div>
+                         
+                </div>
+           
+            </div>
+
+
+
+           
+            <div class="row mt-5">
+                <ul class="nav nav-tabs d-flex justify-content-center " id="myTab" role="tablist">
+                    <li class="nav-item " role="presentation">
+                      <button class="nav-link text-center active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true"><i class="fas fa-clone me-2"></i>Posts</button>
+                    </li>
+                    <li class="nav-item " role="presentation">
+                      <button class="nav-link text-center" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><i class="fas fa-bookmark me-2"></i>Saved</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <!-- post -->
+                        <div class="row">
+                            {% for post in posts %}
+                            <div class="col-md-4">
+                                <input style="display: none;" value="{{post.id}}" id="hiddenvalue"/>
+                                <div class="card home-page-post p-3 mt-3">
+                                    <div class="post-header d-flex justify-content-between">
+                                            <span>
+                                                <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-img ">
+                                                <span>
+                                                    <a href="{{url_for('profile', id= post.author.id)}}" class="post-owner ms-2">{{post.author.username}}</a>
+                                                    <div style="font-size: 12px;margin-left: 55px; " class="text-muted">                      
+                                                        {{post.timestamp.strftime('%b %d,%Y %H:%M %p')}}
+                                                    </div>
+                                                </span>
+                                            
+                                            
+                                            </span>
+                                           
+                                            {% if current_user == post.author %}
+                                            
+                                            <i class="fas fa-ellipsis-h p-2" style="font-size: 20px;cursor: pointer;" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" ></i>
+                    
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                              
+                                         
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Modal{{post.id}}">
+                                                        <span>
+                                                            Edit post
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{url_for('delete_post',id=post.id)}}" method="post">             
+                                                        <input type="submit" class="dropdown-item" value="Delete post">
+                                                    </form>         
+                                                </li>
+                                              
+                                              </ul>    
+                                            <!-- Button trigger modal -->
+                    
+                      
+                                            <!-- Edit post -->
+                                            <div class="modal fade" id="Modal{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit post</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <span>
+                                                            <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-img ">
+                                                            <span>
+                                                                <a href="{{url_for('profile', id= post.author.id)}}" class="post-owner ms-2">{{post.author.username}}</a>
+                                                                <div style="font-size: 12px;margin-left: 60px; " class="text-muted">                      
+                                                                    {{post.timestamp.strftime('%b %d,%Y %H:%M %p')}}
+                                                                </div>
+                                                            </span>
+                                                        
+                                                        
+                                                        </span>
+                                                        <form action="{{url_for('edit_post',id=post.id)}}" method="post" enctype="multipart/form-data" >
+                                                            <input type="text" class="form-control mt-3 mb-3" name="text" id="text1" value="{{post.text}}">
+                                                            {% if post.post_image %}
+                                                            <img src="{{ url_for('static', filename='images/' + post.post_image)}}"  class="img-fluid w-100">
+                                                            <input type="file" id="files{{post.id}}" class="hidden" name="file"/>
+                                                            <div id="choose{{post.id}}" class="mt-3">
+                    
+                                                            </div>
+                                                            <i class="far fa-image" style="cursor: pointer;margin-top: 15px;font-weight: bold;font-size: 25px;"></i>
+                                                            <label for="files{{post.id}}" style="cursor: pointer;margin-top: 10px;font-weight: bold;"> 
+                                                                Change image</label>
+                                                                {% else %}
+                                                                <input type="file" id="files{{post.id}}" class="hidden" name="file"/>
+                                                                <div id="choose{{post.id}}">
+                    
+                                                                </div>
+                                                                <i class="far fa-image" style="cursor: pointer;margin-top: 15px;font-weight: bold;font-size: 25px;"></i>
+                                                                <label for="files{{post.id}}" style="cursor: pointer;margin-top: 10px;font-weight: bold;"> 
+                                                                    Choose image</label>
+                                                            {% endif %}
+                                                            
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary" id="post1">Save changes</button>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                    
+                                            {% endif %}
+                                                                    
+                    
+                                    </div>
+                                    <div class="card-main">
+                                        {{post.text}}
+                                    </div>
+                                    {% if post.post_image %}
+                                    <div class="pt-3">
+                                        <img src="{{ url_for('static', filename='images/' + post.post_image)}}"  class="img-fluid w-100">
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="pt-3">
+                                       
+                                            <span style="cursor: pointer;" id="like" value="{{post.id}}">
+                                                <span id="like_main{{post.id}}">
+                                                    {% if current_user in post.liked_users %}
+                                                    <i class="fas fa-heart a" id="likefas{{post.id}}" style="color: #ED4956;"></i>                    
+                                                    <i class="far fa-heart a" style="display: none;" id="likefar{{post.id}}"></i>                    
+                                                    {% else %}
+                                                    <i class="far fa-heart a" id="likefar{{post.id}}"></i>
+                                                    <i class="fas fa-heart a" style="display: none;color: #ED4956;" id="likefas{{post.id}}"></i>
+                                                    {% endif %}
+                                                </span>
+                                             
+                                                
+                                                
+                                            </span>
+                                         
+                    
+                    
+                                            <span class="ms-4" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment{{post.id}}">
+                                                <i class="far fa-comment a"></i>
+                                           
+                                            </span>
+                                       
+                                            
+                    
+                                            <span class="ms-4" id="save" style="cursor: pointer;" value="{{post.id}}">
+                                                <span id="saved_main{{post.id}}">
+                                                    {% if post in savedposts %}
+                                                    <i class="fas fa-bookmark a" id="fas{{post.id}}"></i>
+                                                    <i class="far fa-bookmark a" id="far{{post.id}}" style="display:none;"></i>
+                                                    {% else %}
+                                                    <i class="far fa-bookmark a" id="far{{post.id}}" ></i>
+                                                    <i class="fas fa-bookmark a" id="fas{{post.id}}" style="display:none"></i>
+                                                    {% endif %}
+                                                </span>
+                                                
+                                        
+                                            </span>
+                    
+                                            <div data-bs-toggle="modal" data-bs-target="#likeModal{{post.id}}" style="cursor:pointer;">
+                                                <span class="b" id="count{{post.id}}" value="{{post.count_like}}">{{post.count_like}}</span>
+                                                {% if post.count_like > 1 %}
+                                                <span>likes</span> 
+                                                {% else %}
+                                                <span>like</span> 
+                                                {% endif %}
+                                            </div>
+                                            <span class="text-muted" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment{{post.id}}">
+                                                {% if post.count_comment > 1  %}
+                                                View all <span id="c{{post.id}}">{{post.count_comment}} </span> comments
+                                                {% else %}
+                                                View all <span id="c{{post.id}}">{{post.count_comment}} </span>  comment
+                                                {% endif %}
+                                            </span>
+                      
+                                            <!-- Like users -->
+                                            <div class="modal fade" id="likeModal{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                       
+                                                        {% for i in post.liked_users %}
+                                                        <div class="mt-3 d-flex justify-content-between">
+                                                            <span>
+                                                                <img src="{{ url_for('static', filename='images/' + i.image)}}" class="circle-img">
+                                                                <a href="{{url_for('profile', id=i.id)}}" class="post-owner ms-2">{{i.username}}</a>
+                                                            
+                                                            </span>
+                                                            <div class="circle-plus">
+                                                                <a href="{{url_for('profile',id=i.id)}}" class=" btn btn-outline-primary ms-2">View</a>
+                                                            </div>
+                                                          
+                                                           
+                                                          </div>
+                                                          <hr>
+                                                        {% endfor %}
+                                                    </div>
+                                                  
+                                                </div>
+                                                </div>
+                                            </div>
+                    
+                    
+                    
+                                                <!-- all comments -->
+                    
+                      <!-- commment -->
+                      <div class="modal fade" id="comment{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Comments</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col-md-12">
+                                    {% for i in post.commented_users %}
+                                    <div id="new_comment{{post.id}}">
+                    
+                                    </div>
+                                    <div class="mb-3 d-flex justify-content-between" id="parent{{i.id}}">
+                                        <span>
+                                            <img src="{{ url_for('static', filename='images/' + i.comment_author.image)}}" class="circle-img ">   
+                                            <span>
+                                                <a href="{{url_for('profile', id=i.comment_author.id)}}" class="post-owner ms-2">{{i.comment_author.username}}</a>
+                                                <span>
+                                                    {{i.text}}
+                                                </span>
+                                              
+                                            </span>
+                                       
+                                       
+                                        </span>
+                                        <span>
+                                            {% if current_user == i.comment_author %}
+                                       
+                                            <i class="fas fa-times" id="remove" value="{{i.id}}" name="{{post.id}}" style="cursor: pointer;" ></i>
+                                            {% endif %}
+                                        </span>
+                                    
+                                      
+                                    </div>
+                                       
+                                    {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                          
+                          </div>
+                        </div>
+                      </div>
+                                     
+                                     
+                                         
+                                           
+                                         
+                                     
+                                    </div>
+                    
+                                    <div class="pt-3">
+                                        <span class="d-flex">
+                                            <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-comment-img">
+                                            <div class="input-group mb-3">     
+                                                <input type="hidden" value="{{post.count_comment}}" id="c{{post.id}}">        
+                                                <input type="text" id="new{{post.id}}" class="form-control comment ms-2" placeholder="Add a comment..." aria-describedby="button-addon2">
+                                                <button class="btn btn-primary" type="button" id="button-addon2" value="{{post.id}}">Post</button>
+                                              </div>
+                    
+                                        </span>
+                                    </div>
+                    
+                                </div>
+                            </div>
+                          
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    
+                         <!-- save post -->
+                         <div class="row">
+                            {% for post in save_posts %}
+                            <div class="col-md-4">
+                                <input style="display: none;" value="{{post.id}}" id="hiddenvalue"/>
+                                <div class="card home-page-post p-3 mt-3">
+                                    <div class="post-header d-flex justify-content-between">
+                                            <span>
+                                                <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-img ">
+                                                <span>
+                                                    <a href="{{url_for('profile', id= post.author.id)}}" class="post-owner ms-2">{{post.author.username}}</a>
+                                                    <div style="font-size: 12px;margin-left: 55px; " class="text-muted">                      
+                                                        {{post.timestamp.strftime('%b %d,%Y %H:%M %p')}}
+                                                    </div>
+                                                </span>
+                                            
+                                            
+                                            </span>
+                                           
+                                            {% if current_user == post.author %}
+                                            
+                                            <i class="fas fa-ellipsis-h p-2" style="font-size: 20px;cursor: pointer;" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" ></i>
+                    
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                              
+                                         
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Modal{{post.id}}">
+                                                        <span>
+                                                            Edit post
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{url_for('delete_post',id=post.id)}}" method="post">             
+                                                        <input type="submit" class="dropdown-item" value="Delete post">
+                                                    </form>         
+                                                </li>
+                                              
+                                              </ul>    
+                                            <!-- Button trigger modal -->
+                    
+                      
+                                            <!-- Edit post -->
+                                            <div class="modal fade" id="Modal{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit post</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <span>
+                                                            <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-img ">
+                                                            <span>
+                                                                <a href="{{url_for('profile', id= post.author.id)}}" class="post-owner ms-2">{{post.author.username}}</a>
+                                                                <div style="font-size: 12px;margin-left: 60px; " class="text-muted">                      
+                                                                    {{post.timestamp.strftime('%b %d,%Y %H:%M %p')}}
+                                                                </div>
+                                                            </span>
+                                                        
+                                                        
+                                                        </span>
+                                                        <form action="{{url_for('edit_post',id=post.id)}}" method="post" enctype="multipart/form-data" >
+                                                            <input type="text" class="form-control mt-3 mb-3" name="text" id="text1" value="{{post.text}}">
+                                                            {% if post.post_image %}
+                                                            <img src="{{ url_for('static', filename='images/' + post.post_image)}}"  class="img-fluid w-100">
+                                                            <input type="file" id="files{{post.id}}" class="hidden" name="file"/>
+                                                            <div id="choose{{post.id}}" class="mt-3">
+                    
+                                                            </div>
+                                                            <i class="far fa-image" style="cursor: pointer;margin-top: 15px;font-weight: bold;font-size: 25px;"></i>
+                                                            <label for="files{{post.id}}" style="cursor: pointer;margin-top: 10px;font-weight: bold;"> 
+                                                                Change image</label>
+                                                                {% else %}
+                                                                <input type="file" id="files{{post.id}}" class="hidden" name="file"/>
+                                                                <div id="choose{{post.id}}">
+                    
+                                                                </div>
+                                                                <i class="far fa-image" style="cursor: pointer;margin-top: 15px;font-weight: bold;font-size: 25px;"></i>
+                                                                <label for="files{{post.id}}" style="cursor: pointer;margin-top: 10px;font-weight: bold;"> 
+                                                                    Choose image</label>
+                                                            {% endif %}
+                                                            
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary" id="post1">Save changes</button>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                    
+                                            {% endif %}
+                                                                    
+                    
+                                    </div>
+                                    <div class="card-main">
+                                        {{post.text}}
+                                    </div>
+                                    {% if post.post_image %}
+                                    <div class="pt-3">
+                                        <img src="{{ url_for('static', filename='images/' + post.post_image)}}"  class="img-fluid w-100">
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="pt-3">
+                                       
+                                            <span style="cursor: pointer;" id="like" value="{{post.id}}">
+                                                <span id="like_main{{post.id}}">
+                                                    {% if current_user in post.liked_users %}
+                                                    <i class="fas fa-heart a" id="likefas{{post.id}}" style="color: #ED4956;"></i>                    
+                                                    <i class="far fa-heart a" style="display: none;" id="likefar{{post.id}}"></i>                    
+                                                    {% else %}
+                                                    <i class="far fa-heart a" id="likefar{{post.id}}"></i>
+                                                    <i class="fas fa-heart a" style="display: none;color: #ED4956;" id="likefas{{post.id}}"></i>
+                                                    {% endif %}
+                                                </span>
+                                             
+                                                
+                                                
+                                            </span>
+                                         
+                    
+                    
+                                            <span class="ms-4" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment{{post.id}}">
+                                                <i class="far fa-comment a"></i>
+                                           
+                                            </span>
+                                       
+                                            
+                    
+                                            <span class="ms-4" id="save" style="cursor: pointer;" value="{{post.id}}">
+                                                <span id="saved_main{{post.id}}">
+                                                    {% if post in savedposts %}
+                                                    <i class="fas fa-bookmark a" id="fas{{post.id}}"></i>
+                                                    <i class="far fa-bookmark a" id="far{{post.id}}" style="display:none;"></i>
+                                                    {% else %}
+                                                    <i class="far fa-bookmark a" id="far{{post.id}}" ></i>
+                                                    <i class="fas fa-bookmark a" id="fas{{post.id}}" style="display:none"></i>
+                                                    {% endif %}
+                                                </span>
+                                                
+                                        
+                                            </span>
+                    
+                                            <div data-bs-toggle="modal" data-bs-target="#likeModal{{post.id}}" style="cursor:pointer;">
+                                                <span class="b" id="count{{post.id}}" value="{{post.count_like}}">{{post.count_like}}</span>
+                                                {% if post.count_like > 1 %}
+                                                <span>likes</span> 
+                                                {% else %}
+                                                <span>like</span> 
+                                                {% endif %}
+                                            </div>
+                                            <span class="text-muted" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#comment{{post.id}}">
+                                                {% if post.count_comment > 1  %}
+                                                View all <span id="c{{post.id}}">{{post.count_comment}} </span> comments
+                                                {% else %}
+                                                View all <span id="c{{post.id}}">{{post.count_comment}} </span>  comment
+                                                {% endif %}
+                                            </span>
+                      
+                                            <!-- Like users -->
+                                            <div class="modal fade" id="likeModal{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                       
+                                                        {% for i in post.liked_users %}
+                                                        <div class="mt-3 d-flex justify-content-between">
+                                                            <span>
+                                                                <img src="{{ url_for('static', filename='images/' + i.image)}}" class="circle-img">
+                                                                <a href="{{url_for('profile', id=i.id)}}" class="post-owner ms-2">{{i.username}}</a>
+                                                            
+                                                            </span>
+                                                            <div class="circle-plus">
+                                                                <a href="{{url_for('profile',id=i.id)}}" class=" btn btn-outline-primary ms-2">View</a>
+                                                            </div>
+                                                          
+                                                           
+                                                          </div>
+                                                          <hr>
+                                                        {% endfor %}
+                                                    </div>
+                                                  
+                                                </div>
+                                                </div>
+                                            </div>
+                    
+                    
+                    
+                                                <!-- all comments -->
+                    
+                      <!-- commment -->
+                      <div class="modal fade" id="comment{{post.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Comments</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col-md-12">
+                                    {% for i in post.commented_users %}
+                                    <div id="new_comment{{post.id}}">
+                    
+                                    </div>
+                                    <div class="mb-3 d-flex justify-content-between" id="parent{{i.id}}">
+                                        <span>
+                                            <img src="{{ url_for('static', filename='images/' + i.comment_author.image)}}" class="circle-img ">   
+                                            <span>
+                                                <a href="{{url_for('profile', id=i.comment_author.id)}}" class="post-owner ms-2">{{i.comment_author.username}}</a>
+                                                <span>
+                                                    {{i.text}}
+                                                </span>
+                                              
+                                            </span>
+                                       
+                                       
+                                        </span>
+                                        <span>
+                                            {% if current_user == i.comment_author %}
+                                       
+                                            <i class="fas fa-times" id="remove" value="{{i.id}}" name="{{post.id}}" style="cursor: pointer;" ></i>
+                                            {% endif %}
+                                        </span>
+                                    
+                                      
+                                    </div>
+                                       
+                                    {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                          
+                          </div>
+                        </div>
+                      </div>
+                                     
+                                     
+                                         
+                                           
+                                         
+                                     
+                                    </div>
+                    
+                                    <div class="pt-3">
+                                        <span class="d-flex">
+                                            <img src="{{ url_for('static', filename='images/' + post.author.image)}}" class="circle-comment-img">
+                                            <div class="input-group mb-3">     
+                                                <input type="hidden" value="{{post.count_comment}}" id="c{{post.id}}">        
+                                                <input type="text" id="new{{post.id}}" class="form-control comment ms-2" placeholder="Add a comment..." aria-describedby="button-addon2">
+                                                <button class="btn btn-primary" type="button" id="button-addon2" value="{{post.id}}">Post</button>
+                                              </div>
+                    
+                                        </span>
+                                    </div>
+                    
+                                </div>
+                            </div>
+                          
+                            {% endfor %}
+                        </div>
+                    </div>          
+                </div>
+            
+            </div>
+
+        </div>
+  
+        {% endblock %}

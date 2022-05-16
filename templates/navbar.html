@@ -1,0 +1,46 @@
+
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light" style="background-color: white!important;">
+    <div class="container">
+        <form class="d-flex" action="/search" method="get">
+            <a class="navbar-brand" href="/">Friends</a>     
+          <input class="form-control first-search me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+        </form>
+            
+   
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+   
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0  justify-content-center ">
+          <li class="nav-item me-5">
+          
+            <a class="nav-link active pt-3" aria-current="page" href="/">
+                <i class="fas fa-home"></i>
+                Home</a>
+          </li>
+          <li class="nav-item me-5">
+            
+            <a class="nav-link active pt-3" aria-current="page" href="/follow">
+              <i class="fas fa-user-friends"></i>
+                Following</a>
+          </li>
+          <li class="nav-item me-5">
+            <a class="nav-link active" aria-current="page" href="{{url_for('profile',id=current_user.id)}}">
+                <img src="{{url_for('static', filename='images/' + current_user.image)}}" class="circle-img">
+            </a>
+          </li>   
+          <form class="d-flex">
+            <input class="form-control second-search me-2 d-none" type="search" placeholder="Search" aria-label="Search">
+          </form>
+      
+        </ul>
+     
+     
+      </div>
+
+
+    </div>
+</nav>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/styles.css" type="text/css">
+    <link rel="icon" href="../static/images/friends.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ 
+   <title>Friends</title>
+</head>
+<body>
+  
+   
+    {% block body %}
+  
+
+    {% endblock %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+        <div class="alert fixed-bottom alert-{{category}} alert-dismissible fade show  mb-0 text-center" role="alert" style="z-index: 100000;">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        document.querySelectorAll('#save').forEach(a=>{
+            a.onclick = ()=>{
+                post_id = a.getAttribute('value')
+                    if (post_id == "")
+                    {
+                        return
+                    }
+                    $.ajax({
+                        type:"POST",
+                        url:"{{url_for('saved')}}",
+                        data:{"id":post_id},
+                    })
+                      
+            let light = document.getElementById(`far${post_id}`)
+            let dark = document.getElementById(`fas${post_id}`)
+            let saved_main = document.getElementById(`saved_main${post_id}`)  
+            if (light.style.display == 'none')
+            {
+                light.style.display = 'inline-block';  
+                dark.style.display = 'none';
+            }
+            else
+            {
+                light.style.display = 'none';
+                dark.style.display = 'inline-block';
+            }
+               
+
+     
+            }
+        })
+
+
+        // like post
+        document.querySelectorAll('#like').forEach(a=>{
+            a.onclick = ()=>{
+                post_id = a.getAttribute('value')
+                    if (post_id == "")
+                    {
+                        return
+                    }
+                   
+                    $.ajax({
+                        type:"POST",
+                        url:"{{url_for('liked')}}",
+                        data:{"id":post_id},
+                    })
+                      
+            let light = document.getElementById(`likefar${post_id}`)
+            let dark = document.getElementById(`likefas${post_id}`)
+            let saved_main = document.getElementById(`like_main${post_id}`)  
+            let count = document.getElementById(`count${post_id}`); 
+            if (light.style.display == 'none')
+            {
+                let n = count.innerHTML;
+                n--;
+                count.innerHTML = n;
+
+               
+                light.style.display = 'inline-block';  
+                dark.style.display = 'none';
+            }
+            else
+            {
+                let n = count.innerHTML;
+              
+                n++;
+                count.innerHTML = n;
+
+                light.style.display = 'none';
+                dark.style.display = 'inline-block';
+            }
+               
+
+     
+            }
+        })
+
+
+        // #Comment
+        document.querySelectorAll('#button-addon2').forEach(a=>{
+            a.onclick = ()=>{
+                let post_id = a.getAttribute('value')
+                    if (post_id == "")
+                    {
+                        return
+                    }
+                    let text = document.getElementById(`new${post_id}`).value;
+                    let c = document.getElementById(`c${post_id}`).innerHTML;
+
+                    c++;
+
+                    document.getElementById(`c${post_id}`).innerHTML = c;
+
+                    let new_comment = document.getElementById(`new_comment${post_id}`);
+                   
+                
+                    $.ajax({
+                        type:"POST",
+                        url:"{{url_for('comment')}}",
+                        data:{"id":post_id,"text":text},
+                        success: function (response) {
+                            let div = document.createElement('div')
+                            div.innerHTML = `
+                            <div class="mb-3 d-flex justify-content-between">
+                    <span>
+                        <img src="{{ url_for('static', filename='images/default.png')}}" class="circle-img ">   
+                        <span>
+                            <a href="" class="post-owner ms-2">${response.username}</a>
+                            <span>
+                                ${text}
+                            </span>
+                          
+                        </span>
+                   
+                   
+                    </span>
+                  
+                
+                  
+                </div>
+                            `
+                            new_comment.append(div)
+                                        
+                        }
+                    })
+                    document.getElementById(`new${post_id}`).value = '';
+            }
+        })
+
+                // # Delete Comment
+            document.querySelectorAll('#remove').forEach(a=>{
+            a.onclick = ()=>{
+                console.log("dele")
+                let id = a.getAttribute('value')
+                let post_id = a.getAttribute('name')
+                let parent = document.getElementById(`parent${id}`)
+                let text = document.getElementById(`new${post_id}`).value;
+                let c = document.getElementById(`c${post_id}`).innerHTML;
+                c--;
+                document.getElementById(`c${post_id}`).innerHTML = c;
+                parent.remove()
+                    if (id == "")
+                    {
+                        return
+                    }
+                    $.ajax({
+                        type:"POST",
+                        url:"{{url_for('delete_comment')}}",
+                        data:{"id":id,"post_id":post_id},
+                    })
+            }
+        })
+
+     
+
+
+
+        document.addEventListener("DOMContentLoaded",()=>{  
+            
+            document.querySelectorAll("#button-addon2").forEach(a=>{
+                let post_id = a.getAttribute('value')
+                let n = document.getElementById(`new${post_id}`)
+                if(n.value.length < 1){
+                    a.disabled = true;
+                }
+                n.addEventListener('change',()=>{
+                    if(n.value.length > 1 )
+                    {  
+                        a.disabled = false;
+                    }
+                    else
+                    {
+                        a.disabled = true;
+                    }
+                
+                })
+            })
+        
+          
+         
+
+            document.querySelectorAll('#hiddenvalue').forEach(a=>{
+                let v = a.value;
+                let image = document.getElementById(`files${v}`)
+                image.onchange = ()=>{
+                    if(image.value){    
+                        let i = image.value.split("\\")      
+                        document.getElementById(`choose${v}`).innerHTML = `Selected - ${i[2]}`
+                    }
+                }
+            })
+         
+           
+        
+        
+            let text = document.getElementById('text')
+            let btn = document.getElementById('post')
+            if(text.value.length < 1){
+                btn.disabled = true;
+            }
+          
+            text.addEventListener('change',()=>{
+                if(text.value.length > 1 ){  
+                    btn.disabled = false;
+                }
+                else{
+                    btn.disabled = true;
+                }
+                
+            })
+
+            let text1 = document.getElementById('text1')
+            let btn1 = document.getElementById('post1')
+            if(text.value.length < 1){
+                btn.disabled = true;
+            }
+            text1.addEventListener('change',()=>{
+                if(text1.value.length > 1 ){  
+                    btn1.disabled = false;
+                }
+                else{
+                    btn1.disabled = true;
+                }
+                
+            })
+        })
+    </script>
+</body>
+</html>

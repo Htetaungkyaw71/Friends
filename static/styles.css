@@ -1,0 +1,199 @@
+body{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #F5F7F9;
+    
+}
+
+.login-header{
+    text-align: center;
+    color:#1877F2;
+    font-size: 43px;
+}
+.forgot{
+    text-decoration: none;
+    text-align: center;
+}
+@media only screen and (max-width: 375px) {
+   .second-search{
+    display: block!important;
+   }
+   .first-search{
+       display: none;
+   }
+   nav{
+    margin: 0;
+    margin-left: auto;
+   }
+  }
+.a{
+    font-size: 20px;
+}
+.b{
+    font-size: 17px;
+}
+@media only screen and (min-width: 1000px) {
+    .login-card{
+        padding: 30px!important;
+    }
+
+  }
+  @media only screen and (max-width: 765px) {
+    .profile-second-content{
+        text-align: center;
+        margin-top: 20px;
+    }
+    .setting{
+        text-align: center;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+   
+}
+.hidden{
+    display: none;
+}
+@media only screen and (max-width: 365px) {
+
+    .following{
+        text-align: center;
+        display: block;
+        margin-top: 5px;
+    }
+ 
+}
+  @media only screen and (max-width: 990px) {
+    
+    .home-page-profile{
+        display: none;
+    }
+    .home-page-people{
+        display: none;
+    }
+   
+  }
+  .home-page-profile{
+    position: fixed;
+    width: 240px;
+}
+
+
+
+.home-page-people{
+   position: fixed;
+   width: 240px;
+}
+
+.search-people{
+    font-size: 23px;
+}
+  @media only screen and (min-width: 987px) and (max-width: 1200px) {
+ 
+    .people{
+        font-size: 14px;
+    }
+    .home-page-profile{
+        position: fixed;
+       width: 220px;
+    }
+    .home-page-people{
+        position: fixed;
+        width: 220px;
+     }
+  }
+  .card{
+      border-radius: 0px;
+      border: none;
+  }
+
+.input-post{
+    border: none;
+    box-shadow: none;
+}
+.circle-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.post-owner{
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+  
+}
+.post-owner:hover{
+    color: black;
+}
+.post-owner1{
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    font-size: 13px;
+}
+.post-owner1:hover{
+    color: black;
+}
+.you{
+    padding: 5px;
+}
+.you:hover{
+    background-color: #F1EDF7;
+    border-radius: 10px;
+ 
+}
+.card-main{
+    padding-top: 15px;
+}
+.circle-comment-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.comment{
+    border-radius: 100px;
+}
+.circle-side-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+   margin-top: 30px;
+   margin-bottom: 10px;
+}
+.bio{
+    font-size: 14px;
+}
+.name{
+    font-size: 18px;
+}
+.view-profile{
+    text-decoration: none;
+   
+    background-color: #ebebeb;
+    padding: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 100px;
+    color: #0B5ED7;
+}
+
+.circle-plus{
+    margin-top: 7px;
+}
+.main{
+    margin-top: 100px!important;
+}
+
+/* profile */
+.profile-img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.profile-name{
+    font-size: 27px;
+    
+}
+.profile-name1{
+    font-size: 24px;
+    
+}

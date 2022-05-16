@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+
+
+    {% block body %}
+    
+    <div class="container p-5">
+        <h1 class="login-header">Friends</h1>
+        <div class="row mt-3">
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-6">
+                <div class="card p-3 login-card">
+                    <form action="/register" method="post">
+                        <div class="mb-3">
+                            <label  class="form-label" >Name</label>
+                            <input autocomplete="off" type="text" class="form-control" name="username">
+                        </div>
+                    
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Email address</label>
+                          <input autocomplete="off" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"   name="email">
+              
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Password</label>
+                          <input autocomplete="off" type="password" class="form-control" name="password">
+                        </div>
+                        <div class="row g-3 align-items-center mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Birth</label>
+                                <input type="date" class="form-control" name="birth">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                              <select class="form-control" name="gender">
+                                  <option disabled selected>Select Gender</option>
+                                  <option>Male</option>
+                                  <option>Female</option>
+                                  <option>Other</option>
+                              </select>
+                            </div>
+                          </div>
+                      
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Sign Up</button>
+                        <div class="mb-3 text-center">
+                            <a href="/login" class="forgot">Already have an account?</a>
+                        </div>
+                      </form>
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+      
+    </div>
+
+    {% endblock %}
