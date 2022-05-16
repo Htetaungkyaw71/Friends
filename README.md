@@ -1,6 +1,6 @@
-#Friends social networking application
+# Friends social networking application
 
-####Introduction
+#### Introduction
 This project is social networking application. Users are able to create account,uploading photo,create post, delete post and edit post."like" other users'posts or "unlike other users'posts. Users can save posts and comment other users'posts. Users can view their and other users profile.Users can edit their profile.Users can also follow eachother and unfollow as well. users can see post's liked_users and other users comments. Users can delete their comments. Users can search other users and posts. Users can see their following users's posts.  
 
 
@@ -8,10 +8,10 @@ This project was built using Flask as a backend framework and JavaScript as a fr
 
 All webpages of the project are mobile-responsive.
 
-####Tools and Languages
+#### Tools and Languages
 HTML CSS Bootstrap Python Flask Javascript Ajax Bootstrap Icon
 
-####Installation
+#### Installation
 pip install requirements.txt.
 
 In python shell- 
@@ -25,7 +25,7 @@ And You can run this command to run your server.
 python -m flask run 
 
 
-####Files and directories
+#### Files and directories
 FRIENDS - main application directory. templates/layout.html contains all static content.
 
 Login.html - you need to first login for application.
