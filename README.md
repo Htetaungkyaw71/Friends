@@ -21,7 +21,7 @@ This project was built using Flask as a backend framework and JavaScript as a fr
 
 #### Installation
 
-- pip install requirements.txt.
+- pip freeze > requirements.txt
 
 - In python shell- 
 
